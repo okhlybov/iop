@@ -5,6 +5,7 @@ require 'iop'
 Gem::Specification.new do |spec|
   spec.name = 'iop'
   spec.version = IOP::VERSION
+  spec.platform = Gem::Platform::RUBY
   spec.author = 'Oleg A. Khlybov'
   spec.email = 'fougas@mail.ru'
   spec.homepage = 'https://bitbucket.org/fougas/iop'
