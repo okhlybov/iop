@@ -69,6 +69,7 @@ module IOP
     def process(data)
       @io.write(data)
     end
+
   end
 
 
