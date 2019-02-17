@@ -6,8 +6,8 @@ Gem::Specification.new do |spec|
   spec.name = 'iop'
   spec.version = IOP::VERSION
   spec.platform = Gem::Platform::RUBY
-  spec.author = 'Oleg A. Khlybov'
-  spec.email = 'fougas@mail.ru'
+  spec.author = ['Oleg A. Khlybov']
+  spec.email = ['fougas@mail.ru']
   spec.homepage = 'https://bitbucket.org/fougas/iop'
   spec.summary = 'I/O pipeline construction framework'
   spec.files = Dir.glob ['lib/**/*.rb']
