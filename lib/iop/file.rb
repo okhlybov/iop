@@ -19,7 +19,7 @@ module IOP
     def process!
       left = @count
       @io.seek(@offset) unless @offset.nil?
-      data = RUBY_VERSION >= '2.4' ? String.new(capacity: @chunk_size) : String.new # Ruby 2.4+
+      data = IOP.allocate_string(@chunk_size)
       while true
         chunk_size = @count.nil? || left > @chunk_size ? @chunk_size : left
         if chunk_size.zero?

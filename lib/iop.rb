@@ -4,6 +4,17 @@ module IOP
   VERSION = '0.1'
 
 
+  if RUBY_VERSION >= '2.4'
+    def self.allocate_string(size)
+      String.new(capacity: size)
+    end
+  else
+    def self.allocate_string(size)
+      String.new
+    end
+  end
+
+
   module Feed
 
     # def process!
