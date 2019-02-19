@@ -19,7 +19,7 @@ module IOP
       @cipher.encrypt
       @key = key.nil? ? @cipher.random_key : @cipher.key = key
       @iv = if iv.nil?
-              @prepend_iv = true
+              @embed_iv = true
               @cipher.random_iv
             else
               @cipher.iv = iv
@@ -28,11 +28,16 @@ module IOP
 
     def process(data = nil)
       unless @continue
-        super(iv)if @prepend_iv
         @continue = true
+        super(iv) if @embed_iv
         @buffer = IOP.allocate_string(data.size)
       end
-      super(data.nil? ? @cipher.final : @cipher.update(data, @buffer))
+      if data.nil?
+        super(@cipher.final)
+        super
+      else
+        super(@cipher.update(data, @buffer)) unless data.size.zero?
+      end
     end
 
   end
@@ -43,16 +48,30 @@ module IOP
     include Feed
     include Sink
 
+    attr_reader :iv, :key
+
     def initialize(cipher = OpenSSLDefaultCipher, key:, iv: nil)
       @cipher = cipher.is_a?(String) ? OpenSSL::Cipher.new(cipher) : cipher
       @cipher.decrypt
-      @key = key.nil? ? @cipher.random_key : @cipher.key = key
-      @iv = if iv.nil?
-              @prepend_iv = true
-              @cipher.random_iv
-            else
-              @cipher.iv = iv
-            end
+      @cipher.key = @key = key
+      @cipher.iv = @iv = iv unless iv.nil?
+    end
+
+    def process(data = nil)
+      unless @continue
+        @continue = true
+        @buffer = IOP.allocate_string(data.size)
+        if iv.nil?
+          @cipher.iv = @iv = data[0, @cipher.iv_len]
+          data = data[@cipher.iv_len..-1]
+        end
+      end
+      if data.nil?
+        super(@cipher.final)
+        super
+      else
+        super(@cipher.update(data, @buffer)) unless data.size.zero?
+      end
     end
 
   end
