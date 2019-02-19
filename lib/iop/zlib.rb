@@ -10,7 +10,7 @@ module IOP
     include Sink
 
     def initialize(*args)
-      @deflate = Zlib::Deflate.new(*args)
+      @args = args
     end
 
     def process(data = nil)
@@ -22,6 +22,12 @@ module IOP
       end
     end
 
+    def process!
+      @deflate = Zlib::Deflate.new(*@args)
+      super
+    ensure
+      @deflate.close
+    end
   end
 
 
@@ -31,7 +37,7 @@ module IOP
     include Sink
 
     def initialize(*args)
-      @inflate = Zlib::Inflate.new(*args)
+      @args = args
     end
 
     def process(data = nil)
@@ -43,6 +49,12 @@ module IOP
       end
     end
 
+    def process!
+      @inflate = Zlib::Inflate.new(*@args)
+      super
+    ensure
+      @inflate.close
+    end
   end
 
 
@@ -56,7 +68,12 @@ module IOP
     end
 
     def process(data = nil)
-      data.nil? ? @compressor.finish : @compressor.write(data)
+      if data.nil?
+        @compressor.finish
+        super
+      else
+        @compressor.write(data)
+      end
     end
 
     def write(data)
@@ -72,29 +89,9 @@ module IOP
   end
 
 
-  class GzipDecompressor
-
-    include Feed
-    include Sink
-
-    def initialize(*args)
-      @args = args
-    end
-
-    def process(data = nil)
-      @data = data
-      @decompressor = Zlib::GzipReader.new(self, *@args) if @decompressor.nil?
-      super(@decompressor.read)
-    end
-
-    def read(count)
-      @data
-    end
-
-    def process!
-      super
-    ensure
-      @decompressor.close unless @decompressor.nil?
+  class GzipDecompressor < ZlibDecompressor
+    def initialize
+      super(16)
     end
   end
 
