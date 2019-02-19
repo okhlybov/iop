@@ -1,5 +1,4 @@
 require 'iop'
-require 'zlib'
 
 
 module IOP
@@ -15,7 +14,12 @@ module IOP
     end
 
     def process(data = nil)
-      super(@deflate.deflate(data))
+      if data.nil?
+        super(@deflate.finish)
+        super
+      else
+        super(@deflate.deflate(data))
+      end
     end
 
   end
@@ -31,7 +35,12 @@ module IOP
     end
 
     def process(data = nil)
-      super(@inflate.inflate(data))
+      if data.nil?
+        super(@inflate.finish)
+        super
+      else
+        super(@inflate.inflate(data))
+      end
     end
 
   end
