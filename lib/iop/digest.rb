@@ -1,4 +1,5 @@
 require 'iop'
+require 'digest'
 
 
 module IOP
