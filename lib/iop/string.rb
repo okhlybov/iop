@@ -4,10 +4,14 @@ require 'iop'
 module IOP
 
 
+  # Feed class to send string in blocks of specified size.
   class StringSplitter
 
     include Feed
 
+    # Create class instance.
+    # @param string [String] string to be sent in blocks
+    # @param block_size [Integer] size of block the string is split into
     def initialize(string, block_size)
       @string = string
       @block_size = block_size
@@ -26,10 +30,14 @@ module IOP
   end
 
 
+  # Sink class to receive data blocks and merge them into a string.
+  #
+  # The actual string assembly is performed by {#to_s} method.
   class StringMerger
 
     include Sink
 
+    # Create class instance.
     def initialize
       @size = 0
       @data = []
@@ -42,6 +50,8 @@ module IOP
       end
     end
 
+    # Return concatenation of all data blocks received into a string.
+    # @return [String]
     def to_s
       string = IOP.allocate_string(@size)
       @data.each {|x| string << x}
