@@ -17,7 +17,7 @@ module IOP
   #   ( IOP::SecureRandomGenerator.new(1024) | IOP::DigestComputer.new(Digest::MD5.new) ).process!
   #
   # @since 0.1
-  # 
+  #
   class SecureRandomGenerator
 
     include Feed

@@ -12,14 +12,14 @@ module IOP
     # Create class instance.
     # @param string [String] string to be sent in blocks
     # @param block_size [Integer] size of block the string is split into
-    def initialize(string, block_size)
+    def initialize(string, block_size = 1024**2)
       @string = string
       @block_size = block_size
     end
 
     def process!
       offset = 0
-      (0..@string.size / @block_size - 1).each do |i|
+      (0..@string.size / @block_size - 1).each do
         process(@string[offset, @block_size])
         offset += @block_size
       end
