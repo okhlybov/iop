@@ -5,6 +5,7 @@ require 'openssl'
 module IOP
 
 
+  # @private
   OpenSSLDefaultCipher = 'AES-256-CBC'.freeze
 
 
