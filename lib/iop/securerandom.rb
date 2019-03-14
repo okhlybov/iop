@@ -25,7 +25,7 @@ module IOP
     # Create class instance.
     # @param size [Integer] total random data size
     # @param block_size [Integer] size of block the data in split into
-    def initialize(size, block_size = 1024**2)
+    def initialize(size, block_size: DefaultBlockSize)
       @size = size
       @block_size = block_size
     end
@@ -36,7 +36,7 @@ module IOP
         process(SecureRandom.bytes(@block_size))
         written += @block_size
       end
-      left = @size-written
+      left = @size - written
       process(SecureRandom.bytes(left)) unless left.zero?
       process
     end
