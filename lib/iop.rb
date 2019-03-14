@@ -2,8 +2,8 @@
 # The basic control flow for an {IOP}-aware pipe is as follows:
 #
 # 1. The pipe is constructed from one or more {IOP}-aware class instances. The two or more objects are linked together with the +|+ operator implemented as the {Feed#|} method by default.
-# 2. The actual processing is then triggered by the {Sink#process!} method of the *last* object in the pipe. By default, this method calls the same method of the upstream object thus forming the stack of nested calls for all objects in the pipe.
-# 3. Upon reaching the very *first* object in the pipe (which by definition has no upstream neighbour), the feed, starts sending blocks of data downstream with the {Feed#process} method. All objects' method implementations (except for the one of the last object in the pipe) are expected to push either this or transformed data further downstream.
+# 2. The actual processing is then triggered by the {Sink#process!} method of the very last object in the pipe. By default, this method calls the same method of the upstream object thus forming the stack of nested calls for all objects in the pipe.
+# 3. Upon reaching the very first object in the pipe (which by definition has no upstream neighbour), the feed, starts sending blocks of data downstream with the {Feed#process} method. All objects' method implementations (except for the one of the last object in the pipe) are expected to push either this or transformed data further downstream.
 # 4. After all data has been processed the finalizing call +#process(nil)+ signifies the end-of-data after which no data should be sent.
 #
 # The {Sink#process!} method is normally overridden in concrete class and is organized as follows:
@@ -29,6 +29,10 @@ module IOP
   VERSION = '0.1'
 
 
+  # Default read block size in bytes for adapters which don't have this parameter externally imposed
+  DefaultBlockSize = 1024**2
+
+
   # @private
   if RUBY_VERSION >= '2.4'
     def self.allocate_string(size)
@@ -38,6 +42,12 @@ module IOP
     def self.allocate_string(size)
       String.new
     end
+  end
+
+
+  # Finds minimum of the values
+  def self.min(a, b)
+    a < b ? a : b
   end
 
 
@@ -123,33 +133,56 @@ module IOP
   end
 
 
-  module SegmentReader
+  #
+  # @note a class including this module must implement the {#next_data} method.
+  # @since 0.1
+  #
+  module BufferingFeed
 
     include Feed
 
     def read!(size)
-      @size = size
-      @read = 0
+      @left = @size = size
       self
-    end
-
-    private def done?
-      @read >= @size
     end
 
     def process!
       unless @buffer.nil?
         if @buffer.size > @size
-          process(@buffer[0, @read = @size])
-          @buffer = (@buffer.size == @size) ? nil : @buffer[@size..-1]
-          process
+          @left = 0
+          process(@buffer[0, @size])
+          @buffer = @buffer[@size..-1]
         else
-          @read = @buffer.size
+          @left -= @buffer.size
           process(@buffer)
           @buffer = nil
         end
       end
+      until @left.zero?
+        data = next_data
+        raise EOFError, 'premature end-of-data encountered' if data.nil?
+        if @left < data.size
+          process(data[0, @left])
+          @buffer = data[@left..-1]
+          @left = 0
+        else
+          process(data)
+          @left -= data.size
+        end
+      end
+      @left = @size = nil
+      process
     end
+
+    #
+    # @abstract
+    # Returns the data portion of non-zero size or +nil+ on EOF.
+    # @return [String] data chunk recently read or +nil+
+    #
+    def next_data
+      raise
+    end
+    remove_method :next_data
 
   end
 

@@ -12,7 +12,7 @@ module IOP
     # Create class instance.
     # @param string [String] string to be sent in blocks
     # @param block_size [Integer] size of block the string is split into
-    def initialize(string, block_size = 1024**2)
+    def initialize(string, block_size: DefaultBlockSize)
       @string = string
       @block_size = block_size
     end
@@ -33,6 +33,8 @@ module IOP
   # Sink class to receive data blocks and merge them into a string.
   #
   # The actual string assembly is performed by {#to_s} method.
+  #
+  # @note instance of this class can be used to collect data from multiple processing runs.
   class StringMerger
 
     include Sink

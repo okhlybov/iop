@@ -5,7 +5,7 @@ require 'net/ftp'
 class Net::FTP
 
   def store_setup(file)
-    @iop = transfercmd("STOR " + file)
+    @iop = transfercmd('STOR ' << file)
   end
 
   def store_cleanup

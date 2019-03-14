@@ -5,7 +5,7 @@ require 'openssl'
 module IOP
 
 
-  # @private
+  # Default cipher ID for OpenSSL adapters
   OpenSSLDefaultCipher = 'AES-256-CBC'.freeze
 
 
