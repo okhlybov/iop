@@ -2,66 +2,70 @@ require 'iop'
 require 'net/ftp'
 
 
+# @private
 class Net::FTP
-
-  def store_setup(file)
-    @iop = transfercmd('STOR ' << file)
-  end
-
-  def store_cleanup
-    @iop.close
-    voidresp
-  end
-
-  def store_rescue
-    getresp
-  end
-
+  public :transfercmd, :voidresp
 end
 
 
 module IOP
 
 
-  module FtpFile
+  # @private
+  module FTP
 
-    def initialize(ftp, file, options = {})
+    def initialize(ftp, file, block_size: DefaultBlockSize, **options)
+      @block_size = block_size
       @options = options
       @file = file
       @ftp = ftp
-      end
-
-  private
+    end
 
     def setup
       if @ftp.is_a?(String)
         @ftp = Net::FTP.open(@ftp, @options)
+        @ftp.login
         @managed = true
       end
-    end
-
-    def login
-      @ftp.login if @managed
     end
 
     def cleanup
       @ftp.close if @managed
     end
 
+    def transfercmd(cmd)
+      @ftp.transfercmd(cmd)
+    end
+
+    def voidresp
+      @ftp.voidresp
+    end
+
   end
 
 
-  class FtpFileReader
+  class FTPFileReader
 
     include Feed
-    include FtpFile
+    include FTP
 
     def process!
       setup
       begin
-        login
-        @ftp.get(@file, nil) {|data| process(data)} # TODO partial read
-        process
+        # Code based on Net::FTP#retrbinary
+        @io = transfercmd('RETR ' << @file)
+        begin
+          loop do
+            process(data = @io.read(@block_size))
+            break if data.nil?
+          end
+          @io.shutdown(Socket::SHUT_WR)
+          @io.read_timeout = 1
+          @io.read
+        ensure
+          @io.close
+        end
+        voidresp
       ensure
         cleanup
       end
@@ -70,23 +74,23 @@ module IOP
   end
 
 
-  class FtpFileWriter
+
+  class FTPFileWriter
 
     include Sink
-    include FtpFile
+    include FTP
 
     def process!
       setup
       begin
-        login
+        # Code based on Net::FTP#storbinary
+        @io = transfercmd('STOR ' << @file)
         begin
-          @io = @ftp.store_setup(@file)
           super
-          @ftp.store_cleanup
-        rescue Errno::EPIPE
-          @ftp.store_rescue
-          raise
+        ensure
+          @io.close
         end
+        voidresp
       ensure
         cleanup
       end
