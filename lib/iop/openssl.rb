@@ -6,7 +6,7 @@ module IOP
 
 
   # Default cipher ID for OpenSSL adapters
-  OpenSSLDefaultCipher = 'AES-256-CBC'.freeze
+  DEFAULT_OPENSSL_CIPHER = 'AES-256-CBC'.freeze
 
 
   class CipherEncryptor
@@ -16,7 +16,7 @@ module IOP
 
     attr_reader :iv, :key
 
-    def initialize(cipher = OpenSSLDefaultCipher, key: nil, iv: nil)
+    def initialize(cipher = DEFAULT_OPENSSL_CIPHER, key: nil, iv: nil)
       @cipher = cipher.is_a?(String) ? OpenSSL::Cipher.new(cipher) : cipher
       @cipher.encrypt
       @key = key.nil? ? @cipher.random_key : @cipher.key = key
@@ -52,7 +52,7 @@ module IOP
 
     attr_reader :iv, :key
 
-    def initialize(cipher = OpenSSLDefaultCipher, key:, iv: nil)
+    def initialize(cipher = DEFAULT_OPENSSL_CIPHER, key:, iv: nil)
       @cipher = cipher.is_a?(String) ? OpenSSL::Cipher.new(cipher) : cipher
       @cipher.decrypt
       @cipher.key = @key = key
