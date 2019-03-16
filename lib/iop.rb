@@ -30,19 +30,28 @@ module IOP
 
 
   # Default read block size in bytes for adapters which don't have this parameter externally imposed
-  DefaultBlockSize = 1024**2
+  DEFAULT_BLOCK_SIZE = 1024**2
 
 
-  # @private
   if RUBY_VERSION >= '2.4'
+    # @private
     def self.allocate_string(size)
       String.new(capacity: size)
     end
   else
+    # @private
     def self.allocate_string(size)
       String.new
     end
   end
+
+
+  # @private
+  INSUFFICIENT_DATA = 'premature end-of-data encountered'.freeze
+
+
+  # @private
+  EXTRA_DATA = 'superfluous data received'.freeze
 
 
   # Finds minimum of the values

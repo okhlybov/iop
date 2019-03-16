@@ -12,7 +12,7 @@ module IOP
     # Create class instance.
     # @param string [String] string to be sent in blocks
     # @param block_size [Integer] size of block the string is split into
-    def initialize(string, block_size: DefaultBlockSize)
+    def initialize(string, block_size: DEFAULT_BLOCK_SIZE)
       @string = string
       @block_size = block_size
     end

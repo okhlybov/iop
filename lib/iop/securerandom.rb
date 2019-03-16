@@ -25,7 +25,7 @@ module IOP
     # Create class instance.
     # @param size [Integer] total random data size
     # @param block_size [Integer] size of block the data in split into
-    def initialize(size, block_size: DefaultBlockSize)
+    def initialize(size, block_size: DEFAULT_BLOCK_SIZE)
       @size = size
       @block_size = block_size
     end
