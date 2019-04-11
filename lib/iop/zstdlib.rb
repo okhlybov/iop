@@ -1,11 +1,11 @@
 require 'iop'
-require 'zlib'
+require 'zstdlib'
 
 
 module IOP
 
 
-  class ZlibCompressor
+  class ZstdCompressor
 
     include Feed
     include Sink
@@ -24,7 +24,7 @@ module IOP
     end
 
     def process!
-      @deflate = Zlib::Deflate.new(*@args)
+      @deflate = Zstdlib::Deflate.new(*@args)
       begin
         super
       ensure
@@ -34,7 +34,7 @@ module IOP
   end
 
 
-  class ZlibDecompressor
+  class ZstdDecompressor
 
     include Feed
     include Sink
@@ -53,7 +53,7 @@ module IOP
     end
 
     def process!
-      @inflate = Zlib::Inflate.new(*@args)
+      @inflate = Zstdlib::Inflate.new(*@args)
       begin
         super
       ensure
@@ -62,43 +62,4 @@ module IOP
     end
   end
 
-
-  class GzipCompressor
-
-    include Feed
-    include Sink
-
-    def initialize(*args)
-      @args = args
-    end
-
-    def process(data = nil)
-      if data.nil?
-        @compressor.finish
-        super
-      else
-        @compressor.write(data)
-      end
-    end
-
-    def write(data)
-      downstream&.process(data)
-    end
-
-    def process!
-      @compressor = Zlib::GzipWriter.new(self, *@args)
-      super
-    ensure
-      @compressor.close unless @compressor.nil?
-    end
   end
-
-
-  class GzipDecompressor < ZlibDecompressor
-    def initialize
-      super(16)
-    end
-  end
-
-
-end

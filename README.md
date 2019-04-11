@@ -36,6 +36,7 @@ The following capabilities are currently implemented:
 - FTP file reading/writing
 - Digest computing
 - GZip/Zlib (de)compression
+- Zstd (de)compression
 - Symmetric cipher (de,en)cryption
 
 ## Basic usage
