@@ -43,8 +43,8 @@ module IOP
 
   class FileReader < IOReader
 
-    def initialize(file, mode: 'rb', offset: nil, size: nil)
-      super(nil, offset: offset, size: size)
+    def initialize(file, mode: 'rb', **args)
+      super(nil, **args)
       @file = file
       @mode = mode
     end
