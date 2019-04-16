@@ -1,8 +1,7 @@
 require 'test/unit'
-
-require 'stringio'
 require 'iop/file'
 require 'iop/string'
+require 'stringio'
 
 class IOTest < Test::Unit::TestCase
 
