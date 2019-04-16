@@ -12,9 +12,9 @@ module IOP
   #
   # Use case: generate 1024 bytes of random data and compute MD5 hash sum of it.
   #
-  #   require 'iop/digest'
-  #   require 'iop/securerandom'
-  #   ( IOP::SecureRandomGenerator.new(1024) | IOP::DigestComputer.new(Digest::MD5.new) ).process!
+  #     require 'iop/digest'
+  #     require 'iop/securerandom'
+  #     ( IOP::SecureRandomGenerator.new(1024) | IOP::DigestComputer.new(Digest::MD5.new) ).process!
   #
   # @since 0.1
   #

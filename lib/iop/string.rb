@@ -4,7 +4,16 @@ require 'iop'
 module IOP
 
 
-  # Feed class to send string in blocks of specified size.
+  #
+  # Feed class to send arbitrary string in blocks of specified size.
+  #
+  # Use case: split the string into 3-byte blocks and reconstruct it.
+  #
+  #     require 'iop/string'
+  #     ( IOP::StringSplitter.new('Hello IOP', 3) | IOP::StringMerger.new ).process!
+  #
+  # @since 0.1
+  #
   class StringSplitter
 
     include Feed
@@ -30,11 +39,22 @@ module IOP
   end
 
 
-  # Sink class to receive data blocks and merge them into a string.
   #
-  # The actual string assembly is performed by {#to_s} method.
+  # Sink class to receive data blocks and merge them into a single string.
+  #
+  # Use case: read current source file into a string.
+  #
+  #     require 'iop/file'
+  #     require 'iop/string'
+  #     ( IOP::FileReader.new($0) | (s = IOP::StringMerger.new) ).process!
+  #     puts s.to_s
+  #
+  # The actual string assembly is performed by the {#to_s} method.
   #
   # @note instance of this class can be used to collect data from multiple processing runs.
+  #
+  # @since 0.1
+  #
   class StringMerger
 
     include Sink
