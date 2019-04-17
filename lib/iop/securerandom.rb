@@ -10,7 +10,7 @@ module IOP
   #
   # This is the adapter for standard {SecureRandom} generator module.
   #
-  # Use case: generate 1024 bytes of random data and compute MD5 hash sum of it.
+  # ### Use case: generate 1024 bytes of random data and compute MD5 hash sum of it.
   #
   #     require 'iop/digest'
   #     require 'iop/securerandom'
@@ -22,7 +22,7 @@ module IOP
 
     include Feed
 
-    # Create class instance.
+    # Creates class instance.
     # @param size [Integer] total random data size
     # @param block_size [Integer] size of block the data in split into
     def initialize(size, block_size: DEFAULT_BLOCK_SIZE)

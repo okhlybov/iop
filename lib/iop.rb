@@ -55,7 +55,7 @@
 # to perform specific setup/cleanup actions, including exception handling and to pass the control flow upstream
 # with +super+ call.
 #
-# Note that when an exception is caught and processed in the overridden +#process!+ method it must be re-raised in order
+# Note that when an exception is caught and processed in overridden +#process!+ method it must be re-raised in order
 # for other upstream objects to have a chance to react to it as well.
 #
 # In case the {Feed#process} is overridden in concrete class it is organized as follows:
@@ -102,6 +102,7 @@ module IOP
   EXTRA_DATA = 'superfluous data received'.freeze
 
 
+  # @private
   # Finds minimum of the values
   def self.min(a, b)
     a < b ? a : b
@@ -122,7 +123,7 @@ module IOP
     #
     # @note this method should be implemented in concrete classes including this module.
     #
-    # Refer to {Sink#process!} for more information.
+    # Refer to {Sink#process!} for details.
     #
     def process!
       raise
@@ -144,9 +145,7 @@ module IOP
       downstream&.process(data) # Ruby 2.3+
     end
 
-    #
     # Returns the downstream object or +nil+ if +self+ is the last object in processing pipe.
-    #
     attr_reader :downstream
 
     #
@@ -163,36 +162,30 @@ module IOP
 
 
   #
-  # Module to be included into classes which receive the upstream data.
+  # Module to be included into classes which receive and process the upstream data.
   #
   # @since 0.1
   #
   module Sink
 
-    #
     # Commences the data processing operation.
     #
     # This implementation calls {#process!} method of the upstream object.
-    #
     def process!
       upstream.process!
     end
 
-    #
     # @abstract
     #
     # @note this method should be implemented in concrete classes including this module.
     #
     # Refer to {Feed#process} for more information.
-    #
     def process(data = nil)
       raise
     end
     remove_method :process
 
-    #
     # Returns the upstream object or +nil+ if +self+ is the first object in processing pipe.
-    #
     attr_accessor :upstream
 
   end
@@ -200,6 +193,7 @@ module IOP
 
   #
   # @private
+  #
   # @note a class including this module must implement the {#next_data} method.
   #
   # @since 0.1
@@ -240,13 +234,11 @@ module IOP
       process
     end
 
-    #
     # @abstract
     #
     # Returns the data portion of non-zero size or +nil+ on EOF.
     #
     # @return [String] data chunk recently read or +nil+
-    #
     def next_data
       raise
     end
