@@ -7,7 +7,7 @@ module IOP
   #
   # Feed class to send arbitrary string in blocks of specified size.
   #
-  # Use case: split the string into 3-byte blocks and reconstruct it.
+  # ### Use case: split the string into 3-byte blocks and reconstruct it.
   #
   #     require 'iop/string'
   #     ( IOP::StringSplitter.new('Hello IOP', 3) | IOP::StringMerger.new ).process!
@@ -18,7 +18,7 @@ module IOP
 
     include Feed
 
-    # Create class instance.
+    # Creates class instance.
     # @param string [String] string to be sent in blocks
     # @param block_size [Integer] size of block the string is split into
     def initialize(string, block_size: DEFAULT_BLOCK_SIZE)
@@ -42,7 +42,7 @@ module IOP
   #
   # Sink class to receive data blocks and merge them into a single string.
   #
-  # Use case: read current source file into a string.
+  # ### Use case: read current source file into a string.
   #
   #     require 'iop/file'
   #     require 'iop/string'
@@ -59,7 +59,7 @@ module IOP
 
     include Sink
 
-    # Create class instance.
+    # Creates class instance.
     def initialize
       @size = 0
       @data = []
@@ -72,7 +72,7 @@ module IOP
       end
     end
 
-    # Return concatenation of all data blocks received into a string.
+    # Returns concatenation of all received data blocks into a single string.
     # @return [String]
     def to_s
       string = IOP.allocate_string(@size)
