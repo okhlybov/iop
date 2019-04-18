@@ -5,11 +5,28 @@ require 'zstdlib'
 module IOP
 
 
+  #
+  # Filter class to perform data compression with Zstandard algorithm.
+  #
+  # This class produces valid _.zst_ files.
+  #
+  # ### Use case: compress a string and store it to .zst file.
+  #
+  #     require 'iop/file'
+  #     require 'iop/string'
+  #     require 'iop/zstdlib'
+  #     ( IOP::StringSplitter.new('Hello IOP') | IOP::ZstdCompressor.new(Zstdlib::BEST_COMPRESSION) | IOP::FileWriter.new('hello.zst') ).process!
+  #
+  # @note this class depends on external +zstdlib+ gem.
+  # @since 0.1
+  #
   class ZstdCompressor
 
     include Feed
     include Sink
 
+    # Creates class instance.
+    # @param args [Array] arguments passed to +Zstdlib::Deflate+ constructor
     def initialize(*args)
       @args = args
     end
@@ -34,11 +51,31 @@ module IOP
   end
 
 
+  #
+  # Filter class to perform Gzip data compression.
+  #
+  # This class is an adapter for the standard Ruby +Zlib::GzipWriter+ class.
+  #
+  # This class can decompress _.zst_ files.
+  #
+  # ### Use case: decompress a .zst file and compute MD5 hash sum of uncompressed data.
+  #
+  #     require 'iop/file'
+  #     require 'iop/digest'
+  #     require 'iop/zstdlib'
+  #     ( IOP::FileReader.new('hello.zst') | IOP::ZstdDecompressor.new | (d = IOP::DigestComputer.new(Digest::MD5.new)) ).process!
+  #     puts d.digest.hexdigest
+  #
+  # @note this class depends on external +zstdlib+ gem.
+  # @since 0.1
+  #
   class ZstdDecompressor
 
     include Feed
     include Sink
 
+    # Creates class instance.
+    # @param args [Array] arguments passed to +Zstdlib::Inflate+ constructor
     def initialize(*args)
       @args = args
     end

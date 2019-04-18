@@ -12,7 +12,7 @@ module IOP
   #
   # Filter class to perform encryption with a symmetric key algorithm (ciphering) of the data passed through.
   #
-  # The class is an adaptor for +OpenSSL::Cipher+ & compatible classes.
+  # The class is an adapter for +OpenSSL::Cipher+ & compatible classes.
   #
   # ### Use case: generate 1024 bytes of random data encrypt is with default cipher algorithm and generated key & initial vector.
   #
@@ -36,6 +36,10 @@ module IOP
 
     # Creates class instance.
     #
+    # @param cipher [String, OpenSSL::Cipher] cipher used for encryption
+    # @param key [String] string representing an encryption key or +nil+
+    # @param iv [String] string representing an initial vector or +nil+
+    #
     # _cipher_ can be either a +String+ or +OpenSSL::Cipher+ instance.
     # If it is a string, a corresponding +OpenSSL::Cipher+ instance will be created.
     #
@@ -45,10 +49,6 @@ module IOP
     # If _iv_ is +nil+ the generated initial vector will be injected into the downstream data preceding the encrypted data itself.
     #
     # Note that key and initial vector are both cipher-dependent. Refer to +OpenSSL::Cipher+ documentation for more information.
-    #
-    # @param cipher [String, OpenSSL::Cipher] cipher used for encryption
-    # @param key [String] string representing an encryption key or +nil+
-    # @param iv [String] string representing an initial vector or +nil+
     def initialize(cipher = DEFAULT_OPENSSL_CIPHER, key: nil, iv: nil)
       @cipher = cipher.is_a?(String) ? OpenSSL::Cipher.new(cipher) : cipher
       @cipher.encrypt
@@ -81,7 +81,7 @@ module IOP
   #
   # Filter class to perform decryption with a symmetric key algorithm (ciphering) of the data passed through.
   #
-  # The class is an adaptor for +OpenSSL::Cipher+ & compatible classes.
+  # The class is an adapter for +OpenSSL::Cipher+ & compatible classes.
   #
   # ### Use case: decrypt a file with default algorithm and embedded initial vector.
   #
@@ -105,14 +105,14 @@ module IOP
 
     # Creates class instance.
     #
+    # @param cipher [String, OpenSSL::Cipher] cipher used for decryption
+    # @param key [String] string representing an encryption key
+    # @param iv [String] string representing an initial vector or +nil+
+    #
     # _cipher_ can be either a +String+ or +OpenSSL::Cipher+ instance.
     # If it is a string, a corresponding +OpenSSL::Cipher+ instance will be created.
     #
     # If _iv_ is +nil+, the initial vector will be obtained from the upstream data. Refer to {CipherEncryptor#initialize} for details.
-    #
-    # @param cipher [String, OpenSSL::Cipher] cipher used for decryption
-    # @param key [String] string representing an encryption key
-    # @param iv [String] string representing an initial vector or +nil+
     def initialize(cipher = DEFAULT_OPENSSL_CIPHER, key:, iv: nil)
       @cipher = cipher.is_a?(String) ? OpenSSL::Cipher.new(cipher) : cipher
       @cipher.decrypt

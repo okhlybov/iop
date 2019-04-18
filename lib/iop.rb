@@ -77,7 +77,7 @@ module IOP
   VERSION = '0.1.0'
 
 
-  # Default read block size in bytes for adapters which don't have this parameter externally imposed
+  # Default read block size in bytes for adapters which don't have this parameter externally imposed.
   DEFAULT_BLOCK_SIZE = 1024**2
 
 
