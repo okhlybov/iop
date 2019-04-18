@@ -26,6 +26,7 @@ module IOP
     include Sink
 
     # Creates class instance.
+    #
     # @param args [Array] arguments passed to +Zstdlib::Deflate+ constructor
     def initialize(*args)
       @args = args
@@ -75,6 +76,7 @@ module IOP
     include Sink
 
     # Creates class instance.
+    #
     # @param args [Array] arguments passed to +Zstdlib::Inflate+ constructor
     def initialize(*args)
       @args = args

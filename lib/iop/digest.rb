@@ -28,12 +28,12 @@ module IOP
 
 
     # Creates class instance.
+    #
     # @param digest computer instance to be fed with data
     def initialize(digest)
       @digest = digest
     end
 
-    # Calls digest on data received and passes it downstream.
     def process(data = nil)
       digest.update(data) unless data.nil?
       super

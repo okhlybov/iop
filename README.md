@@ -1,8 +1,8 @@
-# IOP - the data processing pipeline construction framework for Ruby
+# [IOP](https://bitbucket.org/fougas/iop) - the data processing pipeline construction framework for Ruby
 
 ## Synopsis
 
-IOP is intended for constructing the data processing pipelines in a manner of UNIX command-line pipes.
+IOP is intended for construction of the data processing pipelines in a manner of UNIX shell pipes.
 
 Instead of the standard Ruby way of handling such I/O tasks in form of nested blocks the IOP offers a simpler flat chaining scheme.
 
@@ -38,6 +38,7 @@ The following capabilities are currently implemented:
 - GZip/Zlib (de)compression
 - Zstd (de)compression
 - Symmetric cipher (de,en)cryption
+- Random data generation
 
 ## Basic usage
 
@@ -50,7 +51,7 @@ require 'iop/digest'
 require 'iop/string'
 ```
 
-- The {IOP} module can be included into current namespace to conserve some writing.
+- The `IOP` module can be included into current namespace to conserve some writing.
 
 ```ruby
 include IOP
@@ -79,3 +80,11 @@ The IOP instances do normally perform self-cleanup operations, such as closing f
 ```ruby
 puts digest.hexdigest
 ```
+
+For further information refer to IOP documentation.
+
+# The end
+
+Cheers,
+
+Oleg A. Khlybov <[fougas@mail.ru](mailto:fougas@mail.ru)>

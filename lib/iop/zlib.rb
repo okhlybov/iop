@@ -27,6 +27,7 @@ module IOP
     include Sink
 
     # Creates class instance.
+    #
     # @param args [Array] arguments passed to +Zlib::Deflate+ constructor
     def initialize(*args)
       @args = args
@@ -75,6 +76,7 @@ module IOP
     include Sink
 
     # Creates class instance.
+    #
     # @param args [Array] arguments passed to +Zlib::Inflate+ constructor
     def initialize(*args)
       @args = args
@@ -122,6 +124,7 @@ module IOP
     include Sink
 
     # Creates class instance.
+    #
     # @param args [Array] arguments passed to +Zlib::GzipWriter+ constructor
     def initialize(*args)
       @args = args

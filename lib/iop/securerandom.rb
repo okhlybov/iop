@@ -23,7 +23,9 @@ module IOP
     include Feed
 
     # Creates class instance.
+    #
     # @param size [Integer] total random data size
+    #
     # @param block_size [Integer] size of block the data in split into
     def initialize(size, block_size: DEFAULT_BLOCK_SIZE)
       @size = size

@@ -37,7 +37,9 @@ module IOP
     # Creates class instance.
     #
     # @param cipher [String, OpenSSL::Cipher] cipher used for encryption
+    #
     # @param key [String] string representing an encryption key or +nil+
+    #
     # @param iv [String] string representing an initial vector or +nil+
     #
     # _cipher_ can be either a +String+ or +OpenSSL::Cipher+ instance.
@@ -106,7 +108,9 @@ module IOP
     # Creates class instance.
     #
     # @param cipher [String, OpenSSL::Cipher] cipher used for decryption
+    #
     # @param key [String] string representing an encryption key
+    #
     # @param iv [String] string representing an initial vector or +nil+
     #
     # _cipher_ can be either a +String+ or +OpenSSL::Cipher+ instance.

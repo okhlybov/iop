@@ -30,14 +30,15 @@ module IOP
 
     include Feed
 
-    #
     # Creates class instance.
     #
     # @param io [IO] +IO+ instance to read data from
-    # @param size [Integer] total number of bytes to read; +nil+ value instructs to read until end-of-data is reached
-    # @param offset [Integer] offset in bytes from the stream start to seek to; +nil+ value means no seeking is performed
-    # @param block_size [Integer] size of blocks to read data with
     #
+    # @param size [Integer] total number of bytes to read; +nil+ value instructs to read until end-of-data is reached
+    #
+    # @param offset [Integer] offset in bytes from the stream start to seek to; +nil+ value means no seeking is performed
+    #
+    # @param block_size [Integer] size of blocks to read data with
     def initialize(io, size: nil, offset: nil, block_size: DEFAULT_BLOCK_SIZE)
       @block_size = size.nil? ? block_size : IOP.min(size, block_size)
       @left = @size = size
@@ -87,13 +88,13 @@ module IOP
   #
   class FileReader < IOReader
 
-    #
     # Creates class instance.
     #
     # @param file [String] name of file to read from
-    # @param mode [String] open mode for the file; refer to {File} for details
-    # @param options [Hash] extra keyword parameters passed to {IOReader} constructor
     #
+    # @param mode [String] open mode for the file; refer to {File} for details
+    #
+    # @param options [Hash] extra keyword parameters passed to {IOReader} constructor
     def initialize(file, mode: 'rb', **options)
       super(nil, **options)
       @file = file
@@ -135,11 +136,9 @@ module IOP
 
     include Sink
 
-    #
     # Creates class instance.
     #
     # @param io [IO] +IO+ instance to write data to
-    #
     def initialize(io)
       @io = io
     end
@@ -167,12 +166,11 @@ module IOP
   #
   class FileWriter < IOWriter
 
-    #
     # Creates class instance.
     #
     # @param file [String] name of file to write to
-    # @param mode [String] open mode for the file; refer to {File} for details
     #
+    # @param mode [String] open mode for the file; refer to {File} for details
     def initialize(file, mode: 'wb')
       super(nil)
       @file = file
