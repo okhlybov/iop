@@ -65,10 +65,15 @@ module IOP
     # Creates class instance.
     #
     # @param ftp [String, Net::FTP] FTP server to connect to
+    #
     # @param file [String] file name to process
+    #
     # @param size [Integer] total number of bytes to read; +nil+ value instructs to read until end-of-data is reached
+    #
     # @param offset [Integer] offset in bytes from the stream start to seek to; +nil+ value means no seeking is performed
+    #
     # @param block_size [Integer] size of blocks to process data with
+    #
     # @param options [Hash] extra keyword parameters passed to +Net::FTP+ constructor
     #
     # _ftp_ can be either a +String+ of +Net::FTP+ instance.
@@ -158,7 +163,9 @@ module IOP
     # Creates class instance.
     #
     # @param ftp [String, Net::FTP] FTP server to connect to
+    #
     # @param file [String] file name to process
+    #
     # @param options [Hash] extra keyword parameters passed to +Net::FTP+ constructor
     #
     # _ftp_ can be either a +String+ of +Net::FTP+ instance.

@@ -19,7 +19,9 @@ module IOP
     include Feed
 
     # Creates class instance.
+    #
     # @param string [String] string to be sent in blocks
+    #
     # @param block_size [Integer] size of block the string is split into
     def initialize(string, block_size: DEFAULT_BLOCK_SIZE)
       @string = string
@@ -73,6 +75,7 @@ module IOP
     end
 
     # Returns concatenation of all received data blocks into a single string.
+    #
     # @return [String]
     def to_s
       string = IOP.allocate_string(@size)
