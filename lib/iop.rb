@@ -74,7 +74,7 @@
 module IOP
 
 
-  VERSION = '0.1.0'
+  VERSION = '0.2.0'
 
 
   # Default read block size in bytes for adapters which don't have this parameter externally imposed.
@@ -192,6 +192,62 @@ module IOP
 
 
   #
+  # Abstract reader class for seekable streams which can read with blocks of specified size.
+  #
+  # @since 0.2
+  #
+  class RandomAccessReader
+
+    include Feed
+
+    # Sets up the reader parameters.
+    #
+    # @param size [Integer] total number of bytes to read; +nil+ value instructs to read until end-of-data is reached
+    #
+    # @param offset [Integer] offset in bytes from the stream start to seek to; +nil+ value means no seeking is performed
+    #
+    # @param block_size [Integer] size of blocks to read data with
+    def initialize(size: nil, offset: nil, block_size: DEFAULT_BLOCK_SIZE)
+      @block_size = size.nil? ? block_size : IOP.min(size, block_size)
+      @left = @size = size
+      @offset = offset
+    end
+
+    def process!
+      seek! unless @offset.nil?
+      data = IOP.allocate_string(@block_size)
+      loop do
+        read_size = @size.nil? ? @block_size : IOP.min(@left, @block_size)
+        break if read_size.zero?
+        if read!(read_size, data).nil?
+          if @size.nil?
+            break
+          else
+            raise EOFError, INSUFFICIENT_DATA
+          end
+        else
+          unless @left.nil?
+            @left -= data.size
+            raise IOError, EXTRA_DATA if @left < 0
+          end
+        end
+        process(data) unless data.size.zero?
+      end
+      process
+    end
+
+    private
+
+    def seek!() end
+
+    def read!(read_size, data) nil end
+
+  end
+
+
+  #
+  # Feed implementation for sequential streams which can not seek or request for the block size to read.
+  #
   # @private
   #
   # @note a class including this module must implement the {#next_data} method.
@@ -234,15 +290,12 @@ module IOP
       process
     end
 
-    # @abstract
-    #
     # Returns the data portion of non-zero size or +nil+ on EOF.
     #
+    # This implementation is a stub which returns +nil+.
+    #
     # @return [String] data chunk recently read or +nil+
-    def next_data
-      raise
-    end
-    remove_method :next_data
+    def next_data; nil end
 
   end
 

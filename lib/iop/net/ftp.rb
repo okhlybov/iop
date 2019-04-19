@@ -12,7 +12,7 @@ module IOP
 
 
   # @private
-  module FTPFile
+  module FTPCommons
 
     private
 
@@ -60,7 +60,7 @@ module IOP
   class FTPFileReader
 
     include Feed
-    include FTPFile
+    include FTPCommons
 
     # Creates class instance.
     #
@@ -158,7 +158,7 @@ module IOP
   class FTPFileWriter
 
     include Sink
-    include FTPFile
+    include FTPCommons
 
     # Creates class instance.
     #

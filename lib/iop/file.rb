@@ -26,48 +26,23 @@ module IOP
   #
   # @since 0.1
   #
-  class IOReader
-
-    include Feed
+  class IOReader < RandomAccessReader
 
     # Creates class instance.
     #
     # @param io [IO] +IO+ instance to read data from
     #
-    # @param size [Integer] total number of bytes to read; +nil+ value instructs to read until end-of-data is reached
-    #
-    # @param offset [Integer] offset in bytes from the stream start to seek to; +nil+ value means no seeking is performed
-    #
-    # @param block_size [Integer] size of blocks to read data with
-    def initialize(io, size: nil, offset: nil, block_size: DEFAULT_BLOCK_SIZE)
-      @block_size = size.nil? ? block_size : IOP.min(size, block_size)
-      @left = @size = size
-      @offset = offset
+    # @param options [Hash] keyword arguments passed to {RandomAccessReader} constructor
+    def initialize(io, **options)
+      super(**options)
       @io = io
     end
 
-    def process!
-      @io.seek(@offset) unless @offset.nil?
-      data = IOP.allocate_string(@block_size)
-      loop do
-        read_size = @size.nil? ? @block_size : IOP.min(@left, @block_size)
-        break if read_size.zero?
-        if @io.read(read_size, data).nil?
-          if @size.nil?
-            break
-          else
-            raise EOFError, INSUFFICIENT_DATA
-          end
-        else
-          unless @left.nil?
-            @left -= data.size
-            raise IOError, EXTRA_DATA if @left < 0
-          end
-        end
-        process(data) unless data.size.zero?
-      end
-      process
-    end
+    private
+
+    def seek!() @io.seek(@offset) end
+
+    def read!(read_size, data) @io.read(read_size, data) end
 
   end
 
@@ -94,7 +69,7 @@ module IOP
     #
     # @param mode [String] open mode for the file; refer to {File} for details
     #
-    # @param options [Hash] extra keyword parameters passed to {IOReader} constructor
+    # @param options [Hash] keyword parameters passed to {IOReader} constructor
     def initialize(file, mode: 'rb', **options)
       super(nil, **options)
       @file = file
