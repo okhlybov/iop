@@ -8,7 +8,7 @@ module IOP
   #
   # Feed class to generate and send a random sequence of bytes of specified size.
   #
-  # This is the adapter for standard {SecureRandom} generator module.
+  # This is the adapter for the standard Ruby +securerandom+ module.
   #
   # ### Use case: generate 1024 bytes of random data and compute MD5 hash sum of it.
   #
