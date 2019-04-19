@@ -1,6 +1,7 @@
 --no-private
 --protected
---readme README.ad
--m asciidoc
+--readme README.md
+-m markdown
 -
 lib/**/*.rb
+*.md
