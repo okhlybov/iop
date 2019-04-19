@@ -13,9 +13,9 @@ Consider the example:
 (FileReader.new('input.dat') | GzipCompressor.new | DigestComputer.new(MD5.new) | FileWriter.new('output.dat.gz')).process!
 ```
 
-The above snippet reads input file and compresses it into the GZip-compatible output file simultaneously computing the MD5 hash of compressed data being written.
+The above snippet reads input file and compresses it into the Gzip-compatible output file simultaneously computing the MD5 hash of compressed data being written.
 
-The next snippet presents the incremental pipeline construction capability - a feature not easily implementable with the standard Ruby I/O blocks nesting.
+The next snippet presents the incremental pipeline construction capability - a feature not easily implementable with the standard Ruby I/O block nesting.
 
 ```ruby
 # Incremental pipeline construction example
@@ -25,7 +25,7 @@ pipe |= FileWriter.new('output')
 pipe.process!
 ```
 
-Here the GZip compression is made optional and is thrown in depending on external condition.
+Here the Gzip compression is made optional and is thrown in depending on external condition.
 
 ## Features
 
