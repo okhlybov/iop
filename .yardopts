@@ -1,0 +1,6 @@
+--no-private
+--protected
+--readme README.ad
+-m asciidoc
+-
+lib/**/*.rb
