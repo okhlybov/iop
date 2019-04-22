@@ -7,7 +7,7 @@ module IOP
 
   #
   # Filter class to compute digest of the data being passed through.
-  # It can be used with digest computing classes from the standard Ruby +digest+ and +openssl+ modules.
+  # It can be used with digest computing classes from the standard Ruby +Digest::+ and +OpenSSL::Digest::+ modules.
   #
   # ### Use case: generate 1024 bytes of random data and compute and print MD5 hash sum of it.
   #
