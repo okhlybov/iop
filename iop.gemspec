@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
     Implemented features:
       string splitting/merging,
       IO or local file reading/writing,
-      FTP file reading/writing,
+      FTP/SFTP file reading/writing,
       digest computing,
       Gzip/Zlib (de)compression,
       Zstd (de)compression,

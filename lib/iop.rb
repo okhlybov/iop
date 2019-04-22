@@ -194,6 +194,8 @@ module IOP
   #
   # Abstract reader class for seekable streams which can read with blocks of specified size.
   #
+  # Sequentially reads specified number of bytes starting at specified byte offset.
+  #
   # @since 0.2
   #
   class RandomAccessReader
@@ -215,11 +217,11 @@ module IOP
 
     def process!
       seek! unless @offset.nil?
-      data = IOP.allocate_string(@block_size)
+      buffer = IOP.allocate_string(@block_size)
       loop do
         read_size = @size.nil? ? @block_size : IOP.min(@left, @block_size)
         break if read_size.zero?
-        if read!(read_size, data).nil?
+        if (data = read!(read_size, buffer)).nil?
           if @size.nil?
             break
           else
@@ -236,11 +238,11 @@ module IOP
       process
     end
 
-    private
+    protected
 
     def seek!() end
 
-    def read!(read_size, data) nil end
+    def read!(read_size, buffer) nil end
 
   end
 
@@ -290,12 +292,15 @@ module IOP
       process
     end
 
+    protected
+
     # Returns the data portion of non-zero size or +nil+ on EOF.
     #
     # This implementation is a stub which returns +nil+.
     #
     # @return [String] data chunk recently read or +nil+
     def next_data; nil end
+    remove_method :next_data
 
   end
 

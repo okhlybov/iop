@@ -45,6 +45,7 @@ module IOP
 
   end
 
+
   #
   # Feed class to read file from FTP server.
   #
@@ -52,6 +53,7 @@ module IOP
   #
   # ### Use case: retrieve file from FTP server and store it locally.
   #
+  #     require 'iop/file'
   #     require 'iop/net/ftp'
   #     ( IOP::FTPFileReader.new('ftp.gnu.org', '/pub/README') | IOP::FileWriter.new('README') ).process!
   #
@@ -131,7 +133,6 @@ module IOP
     end
 
   end
-
 
 
   #
