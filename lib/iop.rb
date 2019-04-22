@@ -240,17 +240,21 @@ module IOP
 
     protected
 
+    # @abstract
     def seek!() end
+    remove_method :seek!
 
+    # @abstract
     def read!(read_size, buffer) nil end
+    remove_method :read!
 
   end
 
 
   #
-  # Feed implementation for sequential streams which can not seek or request for the block size to read.
-  #
   # @private
+  #
+  # Feed implementation for sequential streams which can not seek or request for the block size to read.
   #
   # @note a class including this module must implement the {#next_data} method.
   #
@@ -296,8 +300,7 @@ module IOP
 
     # Returns the data portion of non-zero size or +nil+ on EOF.
     #
-    # This implementation is a stub which returns +nil+.
-    #
+    # @abstract
     # @return [String] data chunk recently read or +nil+
     def next_data; nil end
     remove_method :next_data
